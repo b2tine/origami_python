@@ -7,7 +7,7 @@ from movePoints import movePoints
 import matplotlib.pyplot as plt
 
 def folding_opt(fig, points, edges, creases, faces, rhoT, maxIter, outfile) :
-    size_crease = len(creases)
+    size_crease = len(creases) 
     w0 = 0.8
     w1 = 0.2
     w2 = 0.01
@@ -19,6 +19,7 @@ def folding_opt(fig, points, edges, creases, faces, rhoT, maxIter, outfile) :
     rho_delta = np.reshape(rho_delta, size_crease)
     points0 = points
     crease_vect = points[creases[:,1]]-points[creases[:,0]]
+    print crease_vect
     count = [1]
     draw(fig, points, edges, creases, outfile, count)
     for i in range(500) :
@@ -44,6 +45,7 @@ def folding_opt(fig, points, edges, creases, faces, rhoT, maxIter, outfile) :
 	    w = w - w2
         w = max(min(w, 1), 0)
     points = movePoints(points0, crease_vect, faces, rho)
+    print rho
     draw(fig, points, edges, creases, outfile, count)
     return rho_series
 
@@ -61,11 +63,11 @@ def targetFunc(rho, points, creases) :
     vertices = np.unique(creases[:,0])
     F = 0
     for i in range(vertices.size) :
-	X = np.identity(3)
+	X = np.identity(4)
 	for j in range(len(creases)) : 
 	    if creases[j][0] ==	vertices[i] : 
 		creases_vect = points[creases[j][1]] - points[creases[j][0]]
-		X = np.dot(X, computeX(creases_vect, rho[j]))
-        F += np.linalg.norm((X-np.identity(3)), 1)
+		X = np.dot(X, computeX(creases_vect, rho[j], points[vertices[i]]))
+        F += np.linalg.norm((X-np.identity(4)), 1)
 
     return F
