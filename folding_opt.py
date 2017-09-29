@@ -31,7 +31,6 @@ def folding_opt(fig, points, edges, creases, faces, rhoT, maxIter, outfile):
         rho_rand = np.reshape(rho_rand, size_crease)
         mapd = map(lambda x: -1 if x < 0 else 1, rhoT)
         rho_rand = np.array([val*rho_rand[j] for j, val in enumerate(mapd)])
-        print(type(rho_rand[0]))
         direc = (1-w)*rho_rand + w*rhoT
         rho_tau = rho_delta + D * direc
         rho = findFoldable(rho_tau, points0, creases)
